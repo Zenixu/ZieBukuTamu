@@ -1,7 +1,28 @@
 <?php
 require_once('function.php');
 include_once('templates/header.php');
+
+if($_SESSION['role'] != 'operator'){
+  echo "<script>
+          alert('Anda tidak memiliki akses ke halaman ini!');
+          window.location.href = 'index.php';
+        </script>";
+  exit;
+}
+if(isset($_SESSION['role']) && $_SESSION['role'] == 'operator'):
 ?>
+<ul>
+  <li>
+    <a href="buku-tamu.php" class="nav-link">
+      <i class="fas fa-fw fa-book-open"></i>
+      <span>Buku Tamu</span>
+    </a>
+  </li>
+</ul>
+<?php
+  endif;
+?>
+
 
 <!-- Begin Page Content -->
 <div class="container-fluid">

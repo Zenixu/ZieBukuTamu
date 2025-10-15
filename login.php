@@ -22,7 +22,7 @@ if (isset($_POST['login'])) {
             $_SESSION['username'] = $username;
             $_SESSION['role'] = $row['user_role'];
             header("Location: index.php");
-            exit();
+            exit;
         }
     }
     $error = true;
