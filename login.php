@@ -1,5 +1,11 @@
 <?php
 require('koneksi.php');
+session_start();
+
+if (isset($_SESSION['login'])) {
+    header("Location: index.php");
+    exit();
+}
 
 if (isset($_POST['login'])) {
     $username = $_POST['username'];
@@ -12,6 +18,9 @@ if (isset($_POST['login'])) {
         $row = mysqli_fetch_assoc($result);
 
         if (password_verify($password, $row['password'])) {
+            $_SESSION['login'] = true;
+            $_SESSION['username'] = $username;
+            $_SESSION['role'] = $row['user_role'];
             header("Location: index.php");
             exit();
         }
@@ -40,7 +49,7 @@ if (isset($_POST['login'])) {
         rel="stylesheet">
 
     <!-- Custom styles for this template-->
-    <link href="assets/css/sb-admin-2.min.css" rel="stylesheet">
+    <link href="assets/css/sb-admin-2.min.css?v=1" rel="stylesheet">
 
 </head>
 
