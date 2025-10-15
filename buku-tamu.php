@@ -23,7 +23,6 @@ if(isset($_SESSION['role']) && $_SESSION['role'] == 'operator'):
   endif;
 ?>
 
-
 <!-- Begin Page Content -->
 <div class="container-fluid">
   <!-- Page Heading -->
@@ -71,18 +70,6 @@ if(isset($_SESSION['role']) && $_SESSION['role'] == 'operator'):
             <th colspan="2" class="text-center">Aksi</th>
           </tr>
         </thead>
-        <!-- <tfoot>
-          <tr>
-            <th class="text-center">No</th>
-            <th class="text-center">Tanggal</th>
-            <th class="text-center">Nama Tamu</th>
-            <th class="text-center">Alamat</th>
-            <th class="text-center">No HP</th>
-            <th class="text-center">Bertemu</th>
-            <th class="text-center">Kepentingan</th>
-            <th colspan="2" class="text-center">Aksi</th>
-          </tr>
-        </tfoot> -->
         <tbody>
           <?php
             $no = 1;
@@ -170,8 +157,14 @@ $kodeTamu = $huruf . sprintf("%03s", $urutan);
               <input type="text" class="form-control" id="kepentingan" name="kepentingan">
             </div>
           </div>
+          <div class="form-group row">
+            <label for="gambar" class="col-sm-3 col-form-label">Unggah Foto</label>
+            <div class="custom-file col-sm-8">
+              <input type="file" class="custom-file-input" id="gambar" name="gambar">
+              <label for="gambar" class="custom-file-label">Chosse file</label>
+            </div>
+          </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
             <button type="submit" name="simpan" class="btn btn-primary">Simpan</button>
           </div>
         </form>

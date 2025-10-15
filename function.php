@@ -15,7 +15,7 @@ function query($query) {
 function tambah_tamu($data) {
   global $koneksi;
   
-  $id = htmlspecialchars($data["id_tamu"]);
+  $kode = htmlspecialchars($data["id_tamu"]);
   $tanggal = date("Y-m-d");
   $nama_tamu = htmlspecialchars($data["nama_tamu"]);
   $alamat = htmlspecialchars($data["alamat"]);
@@ -24,18 +24,17 @@ function tambah_tamu($data) {
   $kepentingan = htmlspecialchars($data["kepentingan"]);
 
   // upload gambar
-  // $gambar = uploadGambar();
-  // if(!$gambar) {
-  //   return false;
-  // }
+  $gambar = uploadGambar();
+  if(!$gambar) {
+    return false;
+  }
 
-  $query = "INSERT INTO buku_tamu VALUES ('$id', '$tanggal', '$nama_tamu', '$alamat', '$no_hp', '$bertemu', '$kepentingan')";
+  $query = "INSERT INTO buku_tamu VALUES ('$kode', '$tanggal', '$nama_tamu', '$alamat', '$no_hp', '$bertemu', '$kepentingan', '$gambar')";
   mysqli_query($koneksi, $query);
   
   return mysqli_affected_rows($koneksi);
 }
 
-// function ubah data tamu
 function ubah_tamu($data){
   global $koneksi;
   $id = htmlspecialchars($data['id_tamu']);
@@ -47,32 +46,35 @@ function ubah_tamu($data){
   $gambarLama = htmlspecialchars($data['gambarLama']);
 
   // cek apakah user pilih gambar baru atau tidak
-  // if($_FILES['gambar']['error'] === 4) {
-  //   $gambar = $gambarLama;
-  // } else {
-  //   $gambar = uploadGambar();
-  // }
+  if($_FILES['gambar']['error'] === 4) {
+    $gambar = $gambarLama;
+  } else {
+    $gambar = uploadGambar();
+  }
 
   $query = "UPDATE buku_tamu SET
             nama_tamu = '$nama_tamu',
             alamat = '$alamat',
             no_hp = '$no_hp',
             bertemu = '$bertemu',
-            kepentingan = '$kepentingan'
+            kepentingan = '$kepentingan',
+            gambar = '$gambar'
             WHERE id_tamu = '$id'";
   mysqli_query($koneksi, $query);
   
   return mysqli_affected_rows($koneksi);
-};
+}
 
-// hapus tamu 
 function hapus_tamu($id) {
   global $koneksi;
   $query = "DELETE FROM buku_tamu WHERE id_tamu = '$id'";
   mysqli_query($koneksi, $query);
   return mysqli_affected_rows($koneksi);
-};
+}
+// Akhir fungsi tamu
 
+
+// Awal fungsi user
 function tambah_user($data) {
   global $koneksi;
 
@@ -85,7 +87,7 @@ function tambah_user($data) {
   $query = "INSERT INTO users VALUES ('$kode', '$username', '$password_hash', '$user_role')";
   mysqli_query($koneksi, $query);
   return mysqli_affected_rows($koneksi);
-};
+}
 
 function ubah_user($data){
   global $koneksi;
@@ -100,33 +102,72 @@ function ubah_user($data){
   mysqli_query($koneksi, $query);
   
   return mysqli_affected_rows($koneksi);
-};
+}
 
 function hapus_user($id) {
   global $koneksi;
-
   $query = "DELETE FROM users WHERE id_user = '$id'";
-
   mysqli_query($koneksi, $query);
-
   return mysqli_affected_rows($koneksi);
 }
 
-// function ganti password user
-function ganti_password($data) {
+// fungsi ganti password
+function ganti_password($data){
   global $koneksi;
-
-  $kode = htmlspecialchars($data["id_user"]);
-  $password = htmlspecialchars($data["password"]);
+  $kode = htmlspecialchars($data['id_user']);
+  $password = htmlspecialchars($data['password']);
   $password_hash = password_hash($password, PASSWORD_DEFAULT);
 
-  $query = "UPDATE users SET 
-  password = '$password_hash'
-  WHERE id_user = '$kode'";
+  $query = "UPDATE users SET
+            password = '$password_hash'
+            WHERE id_user = '$kode'";
+  mysqli_query($koneksi, $query);
+  
+  return mysqli_affected_rows($koneksi);
+}
 
-mysqli_query($koneksi, $query);
+// fungsi upload gambar
+function uploadGambar() {
+  $namaFile = $_FILES['gambar']['name'];
+  $ukuranFile = $_FILES['gambar']['size'];
+  $error = $_FILES['gambar']['error'];
+  $tmpName = $_FILES['gambar']['tmp_name'];
 
-return mysqli_affected_rows($koneksi);
+  // cek apakah tidak ada gambar yang diupload
+  if($error === 4) {
+    echo "<script>
+            alert('Pilih gambar terlebih dahulu!');
+          </script>";
+    return false;
+  }
 
+  // cek apakah yang diupload adalah gambar
+  $ekstensiGambarValid = ['jpg', 'jpeg', 'png'];
+  $ekstensiGambar = explode('.', $namaFile);
+  $ekstensiGambar = strtolower(end($ekstensiGambar));
+  if(!in_array($ekstensiGambar, $ekstensiGambarValid)) {
+    echo "<script>
+            alert('Yang anda upload bukan gambar!');
+          </script>";
+    return false;
+  }
+
+  // cek jika ukurannya terlalu besar
+  if($ukuranFile > 1000000) {
+    echo "<script>
+            alert('Ukuran gambar terlalu besar!');
+          </script>";
+    return false;
+  }
+
+  // lolos pengecekan, gambar siap diupload
+  // generate nama gambar baru
+  $namaFileBaru = uniqid();
+  $namaFileBaru .= '.';
+  $namaFileBaru .= $ekstensiGambar;
+
+  move_uploaded_file($tmpName, 'assets/upload_gambar/' . $namaFileBaru);
+
+  return $namaFileBaru;
 }
 ?>
