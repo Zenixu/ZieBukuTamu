@@ -150,6 +150,7 @@ $kodeTamu = $huruf . sprintf("%03s", $urutan);
             </div>
           </div>
           <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
             <button type="submit" name="simpan" class="btn btn-primary">Simpan</button>
           </div>
         </form>
