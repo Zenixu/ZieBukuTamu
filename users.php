@@ -6,7 +6,7 @@ include_once('templates/header.php');
 <!-- Begin Page Content -->
 <div class="container-fluid">
   <!-- Page Heading -->
-  <h1 class="h3 mb-4 text-gray-800">Buku Tamu</h1>
+  <h1 class="h3 mb-4 text-gray-800">Data Users</h1>
   <?php
     if(isset($_POST['simpan'])){
       if(tambah_tamu($_POST) > 0){
@@ -37,17 +37,13 @@ include_once('templates/header.php');
   </div>
   <div class="card-body">
     <div class="table-responsive">
-      <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+      <table class="table table-bordered" id="dataTable" width="100%" cel]lspacing="0">
         <thead>
           <tr>
             <th class="text-center">No</th>
-            <th class="text-center">Tanggal</th>
-            <th class="text-center">Nama Tamu</th>
-            <th class="text-center">Alamat</th>
-            <th class="text-center">No HP</th>
-            <th class="text-center">Bertemu</th>
-            <th class="text-center">Kepentingan</th>
-            <th colspan="2" class="text-center">Aksi</th>
+            <th class="text-center">Username</th>
+            <th class="text-center">User Role</th>
+            <th class="text-center">Aksi</th>
           </tr>
         </thead>
         <!-- <tfoot>
@@ -65,22 +61,18 @@ include_once('templates/header.php');
         <tbody>
           <?php
             $no = 1;
-            $buku_tamu = query("SELECT * FROM buku_tamu");
-            foreach($buku_tamu as $tamu) : 
+            $users = query("SELECT * FROM users");
+            foreach($users as $user) : 
           ?>
           <tr>
             <td class="text-center"><?= $no++?></td>
-            <td><?= $tamu['tanggal']?></td>
-            <td><?= $tamu['nama_tamu']?></td>
-            <td><?= $tamu['alamat']?></td>
-            <td><?= $tamu['no_hp']?></td>
-            <td><?= $tamu['bertemu']?></td>
-            <td><?= $tamu['kepentingan']?></td>
+            <td><?= $user['username']?></td>
+            <td><?= $user['user_role']?></td>
             <td class="text-center">
-              <a class="btn btn-success" href="edit-tamu.php?id=<?= $tamu['id_tamu']?>">Ubah</a>
+              <a class="btn btn-success" href="edit-user.php?id=<?= $user['id_user']?>">Ubah</a>
             </td>
             <td class="text-center">
-              <a href="hapus-tamu.php?id=<?= $tamu['id_tamu']?>" onclick="return confirm('Apakah anda yakin ingin menghapus data ini?')" class="btn btn-danger">Hapus</a>
+              <a href="hapus-user.php?id=<?= $user['id_user']?>" onclick="return confirm('Apakah anda yakin ingin menghapus data ini?')" class="btn btn-danger">Hapus</a>
             </td>
           </tr>
           <?php endforeach?>
