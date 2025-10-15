@@ -87,4 +87,28 @@ function tambah_user($data) {
   return mysqli_affected_rows($koneksi);
 };
 
+function ubah_user($data){
+  global $koneksi;
+  $kode = htmlspecialchars($data['id_user']);
+  $username = htmlspecialchars($data['username']);
+  $user_role = htmlspecialchars($data['user_role']);
+
+  $query = "UPDATE users SET
+            username = '$username',
+            user_role = '$user_role'
+            WHERE id_user = '$kode'";
+  mysqli_query($koneksi, $query);
+  
+  return mysqli_affected_rows($koneksi);
+};
+
+function hapus_user($id) {
+  global $koneksi;
+
+  $query = "DELETE FROM users WHERE id_user = '$id'";
+
+  mysqli_query($koneksi, $query);
+
+  return mysqli_affected_rows($koneksi);
+}
 ?>
